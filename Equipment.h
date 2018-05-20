@@ -138,9 +138,9 @@ class Person
         if (a <= k){
             cout << "You find tresure" << endl;
             return 1;
-        } else if (a < k + 40) {
+        } else if (a < k + 30) {
             return 2;
-        } else if (a < k + 70) {
+        } else if (a < k + 60) {
             return 3;
         } else if (a < k + 90) {
             return 5;
@@ -154,9 +154,9 @@ class Person
         if (a <= k){
             cout << "You find tresure" << endl;
             return 1;
-        } else if (a < k + 40) {
+        } else if (a < k + 30) {
             return 2;
-        } else if (a < k + 70) {
+        } else if (a < k + 60) {
             return 3;
         } else if (a < k + 90) {
             return 5;
@@ -170,9 +170,9 @@ class Person
         if (a <= k){
             cout << "You find tresure" << endl;
             return 1;
-        } else if (a < k + 40) {
+        } else if (a < k + 30) {
             return 2;
-        } else if (a < k + 70) {
+        } else if (a < k + 60) {
             return 3;
         } else if (a < k + 90) {
             return 5;
