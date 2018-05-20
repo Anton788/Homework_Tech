@@ -132,7 +132,52 @@ class Person
       for(i = 0; i < bo.size(); ++i)  delete bo[i];
     }
     void ShowEquipment(Person& p);
-
+    int Go_Left_Door(int k){
+        srand(time(0));
+        cout << "You go into left door" << endl;
+        int a = rand() % 100;
+        if (a <= k){
+            cout << "You find tresure" << endl;
+            return 1;
+        } else if (a < k + 40) {
+            cout << "You find dragon" << endl;
+            return 2;
+        } else if (a < k + 70) {
+            return 3;
+        } else{
+            return 4;
+        }
+    }
+    int Go_Right_Door(int k){
+        cout << "You go into right door" << endl;
+        int a = rand() % 100;
+        if (a <= k){
+            cout << "You find tresure" << endl;
+            return 1;
+        } else if (a < k + 40) {
+            cout << "You find dragon" << endl;
+            return 2;
+        } else if (a < k + 70) {
+            return 3;
+        } else{
+            return 4;
+        }
+    }
+    int Go_Medium_Door(int k){
+        cout << "You go into medium door" << endl;
+        int a = rand() % 100;
+        if (a <= k){
+            cout << "You find tresure" << endl;
+            return 1;
+        } else if (a < k + 40) {
+            cout << "You find dragon" << endl;
+            return 2;
+        } else if (a < k + 70) {
+            return 3;
+        } else{
+            return 4;
+        }
+    }
     vector<Swords*> sw;
     vector<Armor*> ar;
     vector<Boots*> bo;

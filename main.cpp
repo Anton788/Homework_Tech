@@ -16,26 +16,154 @@ class Human
     }
 };
 
-/*int OpeningDoor (Person* fighter, int &tresure, int door1, Equipment* q){
+class Comand{
+public:
+    virtual ~Comand(){};
+    virtual int execute(int k) = 0;
+protected:
+    Comand (Person* man): t_man(man){}
+    Person* t_man;
+};
+
+class Go_Left_Doors : public Comand{
+public:
+    Go_Left_Doors(Person* man): Comand(man){}
+    int execute(int k){
+        return t_man->Go_Left_Door(k);
+    }
+};
+
+class Go_Right_Doors : public Comand{
+public:
+    Go_Right_Doors(Person* man): Comand(man){}
+    int execute(int k){
+        return t_man->Go_Right_Door(k);
+    }
+};
+
+class Go_Medium_Doors : public Comand {
+public:
+    Go_Medium_Doors(Person* man): Comand(man){}
+    int execute(int k){
+        return t_man->Go_Medium_Door(k);
+    }
+};
+
+
+class Start{
+    Start* next;
+public:
+    Start(){
+        next = 0;
+    }
+    void Next_it(Start* n){
+        next = n;
+    }
+    void Add_it(Start* n){
+        if (next == 0){
+            next = n;
+        } else {
+            next->Add_it(n);
+        }
+    }
+    virtual void Processing(int &sum_attack){
+        next->Processing(sum_attack);
+    }
+};
+
+class Preporation : public Start{
+public:
+    void Processing(int &sum_attack){
         srand(time(0));
+        int a = rand() % 100;
+        if (a < 50){
+            sum_attack = sum_attack;
+        } else {
+            sum_attack = 2*sum_attack;
+        }
+        Start :: Processing(sum_attack);
+    }
+};
+
+class Run : public Start{
+public:
+    void Processing(int &sum_attack){
+        srand(time(0));
+        int a = rand() % 100;
+        if (a < 20){
+            sum_attack = sum_attack / 3;
+        } else if (a < 60){
+            sum_attack = sum_attack;
+        } else {
+            sum_attack = 3 * sum_attack;
+        }
+        Start :: Processing(sum_attack);
+    }
+};
+
+
+class Impact : public Start{
+public:
+    void Processing(int &sum_attack){
+        srand(time(0));
+        int a = rand() % 100;
+        if (a < 20){
+            sum_attack = sum_attack / 2;
+        } else if (a < 60){
+            sum_attack = sum_attack;
+        } else {
+            sum_attack = 2 * sum_attack;
+        }
+    }
+};
+
+int OpeningDoor (Person* fighter, int &tresure, int index, Equipment* q, Start* first){
         bool dragon = false;
-        if (door1 <= tresure){
+        if (index == 1){
                 cout << "You Win!!!" << endl;
-                return 3;
-        } else if (tresure < door1 && door1 <= 40) {
+                return 1;
+        } else if (index == 4) {
                 cout << "You find way on next level" << endl;
-        } else if (40 < door1 && door1 <= 60) {
+        } else if (index == 3) {
                 cout << "You find Artefact!!!" << endl;
                 int art;
                 art = rand() % 3;
                 if (art == 0){
-                    fighter->sw.push_back((*q).createSword());
+                    int decor = rand() % 3;
+                    if (decor == 0) {
+                        cout << "This is sword" << endl;
+                        fighter->sw.push_back((*q).createSword());
+                    }
+                    if (decor == 1){
+                        cout << "This is jagged sword" << endl;
+                        fighter->sw.push_back(new Jagged((*q).createSword()));
+                    }
+                    if (decor == 2){
+                        cout << "This is poisonous sword" << endl;
+                        fighter->sw.push_back(new Poisonous((*q).createSword()));
+                    }
                 }
                 if (art == 1) {
-                    fighter->ar.push_back((*q).createArmor());
+                    int decor = rand() % 2;
+                    if (decor == 0) {
+                        cout << "This is armor" << endl;
+                        fighter->ar.push_back((*q).createArmor());
+                    }
+                    if (decor == 1){
+                        cout << "This is rough armor" << endl;
+                        fighter->ar.push_back(new Rough((*q).createArmor()));
+                    }
                 }
                 if (art == 2) {
-                    fighter->bo.push_back((*q).createBoots());
+                    int decor = rand() % 2;
+                    if (decor == 0) {
+                        cout << "This is boots" << endl;
+                        fighter->bo.push_back((*q).createBoots());
+                    }
+                    if (decor == 1) {
+                        cout << "This is spiny boots" << endl;
+                        fighter->bo.push_back(new Spiny((*q).createBoots()));
+                    }
                 }
                 fighter->ShowEquipment(*fighter);
         } else {
@@ -49,9 +177,7 @@ class Human
             if (ch == 1) {
                 int chance;
                 int sum = 0;
-                for (int i = 0; i < fighter->bo.size(); ++i) {
-                    sum += fighter->bo[i]->UseBoots(*fighter);
-                }
+                sum = fighter->skill;
                 chance = rand() % (50) + sum;
                 if (chance < 50) {
                     cout << "You are dead" << endl;
@@ -59,29 +185,28 @@ class Human
                 } else {
                     cout << "You could run" << endl;
                 }
-            } else {
+            } else if (ch == 2){
                 int dragon_chance;
                 dragon_chance = rand() % 300;
-                int sum = 0;
-                for (int i = 0; i < fighter->ar.size(); ++i){
-                    sum += fighter->ar[i]->UseArmor();
-                }
-                for (int i = 0; i < fighter->sw.size(); ++i){
-                    sum += fighter->sw[i]->UseSword();
-                }
-                if (dragon_chance > sum) {
+                int sum1 = 0;
+                int sum2 = 0;
+                sum1 = fighter->defen;
+                sum2 = fighter->power;
+                first->Processing(sum2);
+                if (dragon_chance > sum1 + sum2) {
                     cout << "You are dead" << endl;
                     return 1;
                 } else {
                     cout << "You can survive" << endl;
                 }
+            } else {
+                cout << "Wrong answer" << endl;
+                return OpeningDoor(fighter, tresure, index, q, first);
             }
         }
         tresure += 1;
         return 2;
-}*/
-
-
+}
 
 int main()
 {
@@ -92,48 +217,70 @@ int main()
     Equipment* q;
     int n;
     cout << "Choose person - 1 : IronFighter - 2 : Scout" << endl;
-    cin >> n;
     Person* fighter;
-    if (n == 1) {
-        q = &ir_factory;
-        fighter = game.createPerson( ir_factory, 1000);
-    } else if (n == 2) {
-        fighter = game.createPerson( le_factory, 700);
-        q = &le_factory;
+    while (true) {
+        cin >> n;
+        if (n == 1) {
+            q = &ir_factory;
+            fighter = game.createPerson( ir_factory, 1000);
+            break;
+        } else if (n == 2) {
+            fighter = game.createPerson( le_factory, 700);
+            q = &le_factory;
+            break;
+        } else {
+            cout << "Wrong answer. Try again." << endl;
+        }
     }
     cout << "Your Characteristics:" << endl;
     fighter->ShowEquipment(*fighter);
-    cout << fighter->health << endl;
     int tresure = 1;
-    fighter->sw.push_back(new Jagged((*q).createSword()));
-    fighter->bo.push_back(new Spiny((*q).createBoots()));
-    fighter->ShowEquipment(*fighter);
-    cout << fighter->health;
-    /*while(true) {
+    vector<Comand*> steps;
+    Preporation first;
+    Run second;
+    Impact third;
+    first.Add_it(&second);
+    first.Add_it(&third);
+    while(true) {
         int k;
+        int situation;
         int door1 = rand() % 100;
         int door2 = rand() % 100;
         int door3 = rand() % 100;
         cout << "Choose the door: 1 - LeftDoor; 2 - MiddleDoor; 3 - RightDoor" << endl;
         cin >> k;
-        int l;
         if (k == 1) {
-              l = OpeningDoor(fighter, tresure, door1, q);
-              if (l == 1 or l == 3){
+            Go_Left_Doors* step = new Go_Left_Doors(fighter);
+            situation = step->execute(tresure);
+            int res = OpeningDoor(fighter, tresure, situation, q, &first);
+            if (res == 1){
                 break;
-              }
+            }
+            steps.push_back(step);
         }
+
         if (k == 2) {
-            l = OpeningDoor(fighter, tresure, door2, q);
-            if (l == 1 or l == 3){
+            Go_Medium_Doors* step = new Go_Medium_Doors(fighter);
+            situation = step->execute(tresure);
+            int res = OpeningDoor(fighter, tresure, situation, q, &first);
+            if (res == 1){
                 break;
             }
+            steps.push_back(step);
         }
+
         if (k == 3) {
-            l = OpeningDoor(fighter, tresure, door3, q);
-            if (l == 1 or l == 3){
+            Go_Right_Doors* step = new Go_Right_Doors(fighter);
+            situation = step->execute(tresure);
+            int res = OpeningDoor(fighter, tresure, situation, q, &first);
+            if (res == 1){
                 break;
             }
+            steps.push_back(step);
         }
-    }*/
+        ++tresure;
+    }
+    for (int i = 0; i < steps.size(); ++i){
+        delete steps[i];
+    }
 }

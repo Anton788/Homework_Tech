@@ -42,8 +42,10 @@ void Person::ShowEquipment(Person &p){
         bo[i]->UseBoots(p);
     }
     cout << p.skill << endl;
-    cout << "Rune stone:" << endl;
+    cout << "Rune stone: ";
     cout << storage->Power_of_material() << endl;
+    cout << "Health: ";
+    cout << health << endl;
 }
 void Person::Create_Rune(){
         if (storage->store.size() >= 10){
