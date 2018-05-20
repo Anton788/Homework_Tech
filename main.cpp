@@ -304,4 +304,6 @@ int main()
     for (int i = 0; i < steps.size(); ++i){
         delete steps[i];
     }
+    system("pause");
+    return 0;
 }
