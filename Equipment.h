@@ -124,7 +124,6 @@ class Person
     int defen;
     int skill;
     Composite_of_Material* storage;
-    void Create_Rune();
    ~Person() {
       int i;
       for(i = 0; i < sw.size(); ++i)  delete sw[i];
@@ -140,10 +139,11 @@ class Person
             cout << "You find tresure" << endl;
             return 1;
         } else if (a < k + 40) {
-            cout << "You find dragon" << endl;
             return 2;
         } else if (a < k + 70) {
             return 3;
+        } else if (a < k + 90) {
+            return 5;
         } else{
             return 4;
         }
@@ -155,11 +155,12 @@ class Person
             cout << "You find tresure" << endl;
             return 1;
         } else if (a < k + 40) {
-            cout << "You find dragon" << endl;
             return 2;
         } else if (a < k + 70) {
             return 3;
-        } else{
+        } else if (a < k + 90) {
+            return 5;
+        }else{
             return 4;
         }
     }
@@ -170,10 +171,11 @@ class Person
             cout << "You find tresure" << endl;
             return 1;
         } else if (a < k + 40) {
-            cout << "You find dragon" << endl;
             return 2;
         } else if (a < k + 70) {
             return 3;
+        } else if (a < k + 90) {
+            return 5;
         } else{
             return 4;
         }

@@ -30,7 +30,7 @@ void Person::ShowEquipment(Person &p){
     for(i = 0; i < sw.size(); ++i){
         sw[i]->UseSword(p);
     }
-    cout << p.power << endl;
+    cout << p.power + p.storage->Power_of_material()<< endl;
     k = 0;
     cout << "Defense: ";
     for(i = 0; i < ar.size(); ++i){
@@ -47,18 +47,6 @@ void Person::ShowEquipment(Person &p){
     cout << "Health: ";
     cout << health << endl;
 }
-void Person::Create_Rune(){
-        if (storage->store.size() >= 10){
-            int n = storage->store.size();
-            Composite_of_Material* sum_pow;
-            for (int i = 0; i < 10; ++i){
-                sum_pow->Add_Material(storage->store[n - i - 1]);
-                storage->store.pop_back();
-            }
-            storage->Add_Material(sum_pow);
-        }
-}
-
 void Decorate_Sword::UseSword(Person& p){
     modern_sw->UseSword(p);
 }

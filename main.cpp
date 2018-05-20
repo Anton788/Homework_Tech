@@ -118,6 +118,7 @@ public:
 };
 
 int OpeningDoor (Person* fighter, int &tresure, int index, Equipment* q, Start* first){
+        srand(time(0));
         bool dragon = false;
         if (index == 1){
                 cout << "You Win!!!" << endl;
@@ -164,6 +165,22 @@ int OpeningDoor (Person* fighter, int &tresure, int index, Equipment* q, Start* 
                         cout << "This is spiny boots" << endl;
                         fighter->bo.push_back(new Spiny((*q).createBoots()));
                     }
+                }
+                fighter->ShowEquipment(*fighter);
+        } else if (index == 5){
+                cout << "You find material" << endl;
+                int key = rand() % 3;
+                if (key == 0){
+                    cout << "Obsidian" << endl;
+                    fighter->storage->Add_Material(new Obsidian);
+                }
+                if (key == 1){
+                    cout << "Palladium" << endl;
+                    fighter->storage->Add_Material(new Paladium);
+                }
+                if (key == 2){
+                    cout << "Gold" << endl;
+                    fighter->storage->Add_Material(new Gold);
                 }
                 fighter->ShowEquipment(*fighter);
         } else {
@@ -242,6 +259,10 @@ int main()
     first.Add_it(&second);
     first.Add_it(&third);
     while(true) {
+        if (fighter->health <= 0){
+            cout << "You died"<< endl;
+            break;
+        }
         int k;
         int situation;
         int door1 = rand() % 100;
